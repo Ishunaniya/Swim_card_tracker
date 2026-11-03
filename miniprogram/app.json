@@ -1,0 +1,10 @@
+{
+  "pages": ["pages/home/index"],
+  "window": {
+    "navigationBarTitleText": "年卡打卡",
+    "navigationBarBackgroundColor": "#f5f8f7",
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#f5f8f7"
+  },
+  "style": "v2"
+}

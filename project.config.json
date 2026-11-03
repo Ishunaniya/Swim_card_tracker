@@ -1,0 +1,8 @@
+{
+  "appid": "wx0000000000000000",
+  "projectname": "swim-card-tracker",
+  "compileType": "miniprogram",
+  "miniprogramRoot": "miniprogram/",
+  "cloudfunctionRoot": "cloudfunctions/",
+  "setting": { "es6": true, "enhance": true, "postcss": true, "minified": true }
+}

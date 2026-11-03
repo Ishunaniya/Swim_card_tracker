@@ -1,0 +1,85 @@
+<view class="page" wx:if="{{!summary && cloudStatus}}"><view class="muted small">{{cloudStatus}}</view></view>
+<view class="page" wx:if="{{summary}}">
+  <view class="header row">
+    <view><text class="eyebrow">SWIM · RECORD · REPEAT</text><view class="title">年卡打卡</view></view>
+    <button class="button secondary compact" bindtap="openSettings">年卡设置</button>
+  </view>
+  <view class="period">{{summary.period}}</view>
+  <view wx:if="{{cloudStatus}}" class="muted small">{{cloudStatus}}</view>
+
+  <view class="hero card">
+    <text class="eyebrow">把每一次到场，变成看得见的坚持</text>
+    <view class="hero-title">今天，也去游一会儿。</view>
+    <view class="muted">{{today}} · 同一天可记录多次到场</view>
+    <button class="button primary checkin" bindtap="checkInToday">＋ 今天到场，打个卡</button>
+    <button class="text-button" bindtap="openDateEntry">补记其他日期</button>
+    <view class="date-entry" wx:if="{{entryOpen}}">
+      <picker mode="date" value="{{entryDate}}" bindchange="chooseEntryDate"><view class="date-value">{{entryDate}}　⌄</view></picker>
+      <view class="row actions"><button class="button secondary" bindtap="cancelDateEntry">取消</button><button class="button primary" bindtap="submitDateEntry">记录到场</button></view>
+    </view>
+  </view>
+
+  <view class="stats row">
+    <view class="card stat"><view class="muted">累计到场</view><view class="stat-number">{{summary.total}}<text class="unit"> 次</text></view><view class="small">平均每次 ¥{{summary.averageCost}}</view></view>
+    <view class="card stat"><view class="muted">本月到场</view><view class="stat-number">{{summary.monthTotal}}<text class="unit"> 次</text></view><view class="small">目标 {{summary.monthTarget}} 次</view></view>
+  </view>
+
+  <view class="card">
+    <view class="row section-head"><view><view class="section-title">本月的小目标</view><view class="muted small">{{summary.monthLabel}}</view></view><text class="badge">{{summary.monthPercent}}%</text></view>
+    <view class="goal-number">{{summary.monthTotal}} <text class="unit">/ {{summary.monthTarget}} 次</text></view>
+    <view class="track"><view class="fill" style="width: {{summary.monthPercent}}%;"></view></view>
+    <view class="goal-caption">{{summary.monthLeft}}</view><view class="muted small">{{summary.monthNote}}</view>
+  </view>
+
+  <view class="card">
+    <view class="row section-head"><view class="section-title">离回本更近一点</view><text class="badge">{{summary.valueStatus}}</text></view>
+    <view class="muted small">年卡 ¥{{summary.price}} · 每到场一次，都更划算</view>
+    <view class="threshold" wx:for="{{summary.thresholds}}" wx:key="key">
+      <view class="row section-head"><text>对比 ¥{{item.fee}} / 次</text><text class="strong">{{item.count}} 次回本</text></view>
+      <view class="track"><view class="fill" style="width: {{item.percent}}%;"></view></view><view class="muted small caption">{{item.caption}}</view>
+    </view>
+  </view>
+
+  <view class="card months-card">
+    <view class="row section-head"><view><view class="section-title">每月到场计划</view><view class="muted small">点击目标数字可单独调整</view></view><button class="text-button compact" bindtap="jumpCurrent">当前月</button></view>
+    <view wx:for="{{summary.months}}" wx:key="key" class="month-row {{item.current ? 'current' : ''}}" id="month-{{item.key}}">
+      <view class="row section-head"><view><view class="strong">{{item.label}}</view><view class="muted small">{{item.current ? '当前月份' : '第 ' + item.index + ' 个月'}}</view></view><text class="badge">{{item.status}}</text></view>
+      <view class="row month-count"><text class="strong">{{item.actual}} 次</text><text class="muted"> / 目标 </text><input class="target-input" type="digit" value="{{item.target}}" data-month="{{item.key}}" bindblur="changeMonthTarget" aria-label="{{item.label}}目标次数"/><text>次</text></view>
+      <view class="track mini"><view class="fill" style="width: {{item.percent}}%;"></view></view>
+    </view>
+  </view>
+
+  <view class="card">
+    <view class="row section-head"><view class="section-title">到场记录</view><text class="muted small">共 {{summary.total}} 次</text></view>
+    <view wx:if="{{!summary.visits.length}}" class="empty">还没有到场记录，今天开始积累吧。</view>
+    <view class="record" wx:for="{{summary.visits}}" wx:key="id">
+      <view class="row section-head"><view><view class="strong">✓ {{item.label}}</view><view class="muted small">{{item.monthLabel}}<text wx:if="{{item.sameDayCount > 1}}"> · 当天第 {{item.sameDayIndex}} 次</text></view></view><text class="badge">＋1 次</text></view>
+      <view class="record-actions row"><button class="text-button" data-id="{{item.id}}" bindtap="editVisit">改日期</button><button class="text-button danger" data-id="{{item.id}}" bindtap="deleteVisit">删除</button></view>
+    </view>
+  </view>
+  <view class="card backup-card">
+    <view class="section-title">数据备份与迁移</view>
+    <view class="muted small backup-copy">导出 JSON 文件可留存或迁移到其他平台；导入会替换当前账号的云端数据。</view>
+    <view class="row backup-actions">
+      <button class="button secondary" bindtap="exportBackup">导出 JSON</button>
+      <button class="button secondary" bindtap="importBackup" disabled="{{unverifiedOffline}}">导入 JSON</button>
+    </view>
+  </view>
+  <view class="footer">按自己的节奏，游得开心。</view>
+</view>
+
+<view class="modal-mask" wx:if="{{settingsOpen}}" bindtap="closeSettings" catchtouchmove="stopPropagation">
+  <view class="modal" catchtap="stopPropagation">
+    <view class="row section-head"><view class="section-title">年卡设置</view><button class="text-button compact" bindtap="closeSettings">关闭</button></view>
+    <scroll-view scroll-y class="settings-fields">
+      <view class="field"><text>年卡总价（元）</text><input type="digit" value="{{draft.price}}" data-field="price" bindinput="changeSetting"/></view>
+      <view class="field"><text>开始月份</text><picker mode="date" fields="month" value="{{draft.startMonth}}" bindchange="chooseStartMonth"><view class="date-value">{{draft.startMonth}}　⌄</view></picker></view>
+      <view class="field"><text>年卡时长（月）</text><input type="number" value="{{draft.duration}}" data-field="duration" bindinput="changeSetting"/></view>
+      <view class="field"><text>默认每月目标（次）</text><input type="digit" value="{{draft.monthlyTarget}}" data-field="monthlyTarget" bindinput="changeSetting"/></view>
+      <view class="field"><text>对比单次票价 A（元）</text><input type="digit" value="{{draft.feeA}}" data-field="feeA" bindinput="changeSetting"/></view>
+      <view class="field"><text>对比单次票价 B（元）</text><input type="digit" value="{{draft.feeB}}" data-field="feeB" bindinput="changeSetting"/></view>
+      <view class="muted small">单独设置的月目标优先；修改开始月份时，会按月份顺序平移。</view>
+    </scroll-view>
+    <button class="button primary save-settings" bindtap="saveSettings">保存设置</button>
+  </view>
+</view>
