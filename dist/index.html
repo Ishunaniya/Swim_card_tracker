@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0e7490">
+  <meta name="description" content="记录年卡每一次到场，看看离回本还有多远。">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+  <title>年卡打卡</title>
+</head>
+<body>
+  <main class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="#top" aria-label="年卡打卡首页">
+        <span class="brand-mark" aria-hidden="true">≈</span>
+        <span>年卡打卡</span>
+      </a>
+      <button class="icon-button" id="settings-open" aria-label="打开年卡设置" title="年卡设置">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 8.4a3.6 3.6 0 1 0 0 7.2 3.6 3.6 0 0 0 0-7.2Zm8 4.6a8.2 8.2 0 0 0 0-2l1.5-1.2-1.5-2.6-1.9.7a8.1 8.1 0 0 0-1.7-1L16.1 5h-3l-.4 1.9a8.1 8.1 0 0 0-1.8 0L10.3 5h-3L7 6.9a8.1 8.1 0 0 0-1.7 1l-1.9-.7-1.5 2.6L3.4 11a8.2 8.2 0 0 0 0 2l-1.5 1.2 1.5 2.6 1.9-.7a8.1 8.1 0 0 0 1.7 1l.4 1.9h3l.4-1.9a8.1 8.1 0 0 0 1.8 0l.4 1.9h3l.4-1.9a8.1 8.1 0 0 0 1.7-1l1.9.7 1.5-2.6L20 13Z"/></svg>
+      </button>
+    </header>
+
+    <section class="hero" id="top">
+      <div class="hero-copy">
+        <p class="eyebrow">每一次到场，都离回本更近一点</p>
+        <h1>今天去游泳了吗？</h1>
+        <p class="hero-sub" id="card-period">14 个月年卡 · 2026.11—2027.12</p>
+      </div>
+      <div class="hero-decoration" aria-hidden="true"><span></span><span></span><span></span></div>
+      <button class="checkin-button" id="checkin-today">
+        <span class="checkin-icon" aria-hidden="true">＋</span>
+        <span><strong>今天打卡</strong><small>每点一次记一次，同一天可多次</small></span>
+        <span class="button-arrow" aria-hidden="true">→</span>
+      </button>
+    </section>
+
+    <section class="stats-grid" aria-label="打卡统计">
+      <article class="stat-card stat-primary">
+        <span class="stat-label">累计到场</span>
+        <div class="stat-number"><strong id="total-visits">0</strong><span>次</span></div>
+        <span class="stat-foot" id="average-cost">平均每次 ¥0.00</span>
+      </article>
+      <article class="stat-card">
+        <span class="stat-label">本月打卡</span>
+        <div class="stat-number"><strong id="month-visits">0</strong><span>次</span></div>
+        <span class="stat-foot" id="month-target-foot">目标 12 次</span>
+      </article>
+    </section>
+
+    <section class="panel month-panel">
+      <div class="section-heading">
+        <div><p class="eyebrow">KEEP GOING</p><h2>本月计划</h2></div>
+        <span class="month-chip" id="current-month-label">2026年11月</span>
+      </div>
+      <div class="monthly-progress-copy">
+        <div><strong id="month-progress-main">0 <span>/ 12 次</span></strong><span id="month-left">还差 12 次达标</span></div>
+        <span class="progress-percent" id="month-percent">0%</span>
+      </div>
+      <div class="progress-track"><div class="progress-fill" id="month-progress-bar"></div></div>
+      <p class="soft-note" id="month-plan-note">按自己的节奏来，完成目标就很棒。</p>
+    </section>
+
+    <section class="panel breakeven-panel">
+      <div class="section-heading">
+        <div><p class="eyebrow">CARD VALUE</p><h2>回本进度</h2></div>
+        <span class="status-pill" id="value-status">正在积累</span>
+      </div>
+      <p class="breakeven-intro">年卡 ¥<span id="price-inline">2,622</span>，换算成次卡大约需要去这么多次</p>
+      <div class="threshold-row" id="threshold-row-32">
+        <div class="threshold-heading"><span class="threshold-dot teal"></span><span>按 ¥32 / 次</span><strong id="threshold-count-32">82 次</strong></div>
+        <div class="progress-track slim"><div class="progress-fill teal-fill" id="threshold-bar-32"></div></div>
+        <span class="threshold-caption" id="threshold-caption-32">还差 82 次</span>
+      </div>
+      <div class="threshold-row" id="threshold-row-29">
+        <div class="threshold-heading"><span class="threshold-dot coral"></span><span>按 ¥29 / 次</span><strong id="threshold-count-29">91 次</strong></div>
+        <div class="progress-track slim"><div class="progress-fill coral-fill" id="threshold-bar-29"></div></div>
+        <span class="threshold-caption" id="threshold-caption-29">还差 91 次</span>
+      </div>
+    </section>
+
+    <section class="panel months-panel">
+      <div class="section-heading">
+        <div><p class="eyebrow">YOUR 14 MONTHS</p><h2>月度记录</h2></div>
+        <button class="text-button" id="jump-current">回到本月 ↓</button>
+      </div>
+      <div class="month-list" id="month-list"></div>
+    </section>
+
+    <section class="panel history-panel">
+      <div class="section-heading">
+        <div><p class="eyebrow">RECENT VISITS</p><h2>打卡记录</h2></div>
+        <button class="text-button" id="date-add-open">补记日期＋</button>
+      </div>
+      <form class="date-entry" id="date-entry" hidden>
+        <label for="visit-date">选择到场日期</label>
+        <div class="date-entry-row"><input id="visit-date" type="date" required><button class="small-primary" type="submit">添加一次</button><button class="quiet-button" type="button" id="date-add-cancel">取消</button></div>
+      </form>
+      <div class="record-list" id="record-list"></div>
+      <p class="empty-state" id="empty-state">还没有打卡记录，去游一次，点下上面的按钮吧。</p>
+    </section>
+
+    <section class="backup-panel">
+      <div><strong>记录保存在这台设备</strong><span>建议偶尔导出备份，换手机或清理浏览器前可再导入。</span></div>
+      <div class="backup-actions"><button class="backup-button" id="export-data">导出备份</button><button class="backup-button muted" id="import-open">导入</button><input id="import-file" type="file" accept="application/json,.json" hidden></div>
+    </section>
+
+    <footer class="footer-note">只保存在当前浏览器 · 不会上传你的打卡记录</footer>
+  </main>
+
+  <dialog id="settings-dialog" class="settings-dialog">
+    <form method="dialog" id="settings-form">
+      <div class="dialog-heading"><div><p class="eyebrow">CARD SETTINGS</p><h2>年卡设置</h2></div><button class="icon-button close-button" value="cancel" aria-label="关闭">×</button></div>
+      <label>卡价（元）<input id="setting-price" type="number" min="0" step="1" required></label>
+      <label>开始月份<input id="setting-start" type="month" required></label>
+      <div class="form-columns"><label>有效月数<input id="setting-duration" type="number" min="1" max="36" step="1" required></label><label>每月目标（次）<input id="setting-target" type="number" min="0" max="99" step="1" required></label></div>
+      <p class="form-caption">两个次卡价格用于计算不同的回本线。</p>
+      <div class="form-columns"><label>次卡价格 A<input id="setting-fee-32" type="number" min="1" step="0.5" required></label><label>次卡价格 B<input id="setting-fee-29" type="number" min="1" step="0.5" required></label></div>
+      <div class="dialog-actions"><button class="quiet-button" value="cancel">取消</button><button class="small-primary" id="settings-save" value="save">保存设置</button></div>
+    </form>
+  </dialog>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="app.js" defer></script>
+</body>
+</html>
