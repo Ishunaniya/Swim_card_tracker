@@ -1,7 +1,7 @@
 const tracker = require('./utils/tracker');
 
 // Set this to the cloud environment ID from the WeChat Cloud Development console.
-const CLOUD_ENV_ID = '';
+const CLOUD_ENV_ID = 'old-centipede-d2gnb416g67259311';
 
 App({
   globalData: {
